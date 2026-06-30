@@ -4,7 +4,10 @@ import Navbar from './Navbar';
 import Events from './Events';
 import Footer from './Footer';
 
-const BACKEND_API = 'http://127.0.0.1:8000';
+// Automatically switches endpoints depending on where the app is running
+const BACKEND_API = import.meta.env.MODE === 'development'
+  ? 'http://127.0.0.1:8000'                      // Local Django Server
+  : 'https://amber-backend-qyi2.onrender.com';   // Live Render Server
 
 const EventsPage = () => {
   const [carouselEvents, setCarouselEvents] = useState([]);

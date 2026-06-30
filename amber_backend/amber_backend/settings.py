@@ -32,6 +32,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    'amber-backend-qyi2.onrender.com',
     "api.ambercorsystems.com", # Your future production backend endpoint
 ]
 
