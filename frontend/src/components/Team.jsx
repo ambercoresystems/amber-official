@@ -4,22 +4,22 @@ const Team = () => {
   const leadership = [
     {
       name: "Abhijith P M",
-      role: "Managing Partner",
+      role: "Chief Technology Officer (CTO), Managing Partner",
       initial: "A"
     },
     {
       name: "Amaljith N Raj",
-      role: "Managing Partner",
+      role: "Chief Strategy Officer (CSO), Managing Partner",
       initial: "M"
     },
     {
       name: "Bhagyaraj J",
-      role: "Partner",
+      role: "Chief Human Resource Officer (CHRO),Partner",
       initial: "B"
     },   
     {
       name: "Harikrishnan A",
-      role: "Partner",
+      role: "Embedded Firmware Engineer,Partner",
       initial: "H"
     },
   ];
