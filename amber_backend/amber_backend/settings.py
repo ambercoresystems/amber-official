@@ -40,17 +40,23 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    # 1. Cloudinary storage goes first
+    'cloudinary_storage',
+    
+    # 2. Core Django default apps (Keep ONLY ONE staticfiles line here!)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  # 🌟 Ensure this is NOT duplicated below!
+
+    # 3. Third-party packages
     'rest_framework',
     'corsheaders',
-    'cloudinary_storage', 
-    'django.contrib.staticfiles',
     'cloudinary',
+
+    # 4. Your custom apps
     'core',
 ]
 
