@@ -4,7 +4,12 @@ import React, { useState, useEffect } from 'react';
 // Automatically switches endpoints depending on where the app is running
 const BACKEND_API = import.meta.env.MODE === 'development'
   ? 'http://127.0.0.1:8000'                      // Local Django Server
-  : 'https://amber-backend-qyi2.onrender.com';   // Live Render Server
+  : 'https://amber-backend-qyi2.onrender.com';   
+  
+  // Live Render Server
+  const IMAGE_BASE_URL = import.meta.env.MODE === 'development'
+  ? 'http://127.0.0.1:8000'
+  : 'https://res.cloudinary.com/mmuummth/image/upload/'; //
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -101,7 +106,19 @@ const Events = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
           {displayedEvents.map((event) => (
             <div key={event.id} onClick={() => { setSelectedEvent(event); setCurrentImgIndex(0); }} style={{ background: '#fff', borderRadius: '16px', overflow: 'hidden', cursor: 'pointer', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-              <img src={event.cover_image || 'https://via.placeholder.com/800x400'} alt={event.title} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+               // Change this line:
+
+// To this smart URL handler:
+<img 
+  src={
+    event.cover_image 
+      ? (event.cover_image.startsWith('http') ? event.cover_image : `${IMAGE_BASE_URL}${event.cover_image}`)
+      : 'https://via.placeholder.com/800x400'
+  } 
+  alt={event.title} 
+  style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
+/> 
+
               <div style={{ padding: '1.5rem' }}>
                 <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: 'bold', textTransform: 'uppercase' }}>{event.event_type}</span>
                 <h3 style={{ fontFamily: 'Syne', margin: '0.5rem 0', fontSize: '1.2rem', color: '#111' }}>{event.title}</h3>

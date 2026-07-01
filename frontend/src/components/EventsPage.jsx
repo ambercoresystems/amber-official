@@ -7,7 +7,12 @@ import Footer from './Footer';
 // Automatically switches endpoints depending on where the app is running
 const BACKEND_API = import.meta.env.MODE === 'development'
   ? 'http://127.0.0.1:8000'                      // Local Django Server
-  : 'https://amber-backend-qyi2.onrender.com';   // Live Render Server
+  : 'https://amber-backend-qyi2.onrender.com';  
+  // Live Render Server
+
+const IMAGE_BASE_URL = import.meta.env.MODE === 'development'
+  ? 'http://127.0.0.1:8000'
+  : 'https://res.cloudinary.com/mmuummth/image/upload/';
 
 const EventsPage = () => {
   const [carouselEvents, setCarouselEvents] = useState([]);
@@ -53,8 +58,15 @@ const EventsPage = () => {
             }}>
               {/* Dark Overlay Tint for premium styling readability */}
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%)', zIndex: 2 }}></div>
-              <img src={ev.cover_image} alt={ev.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              
+              <img 
+                src={
+                  ev.cover_image 
+                    ? (ev.cover_image.startsWith('http') ? ev.cover_image : `${IMAGE_BASE_URL}${ev.cover_image}`)
+                    : 'https://via.placeholder.com/800x400'
+                } 
+                alt={ev.title} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              />              
               {/* Floating Typography Details */}
               {/* UPDATED SLIDER TYPOGRAPHY VIEW BLOCK */}
 <div style={{ position: 'absolute', bottom: '18%', left: '8%', zIndex: 3, maxWidth: '700px', color: '#fff' }}>
