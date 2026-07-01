@@ -10,10 +10,12 @@ const IMAGE_BASE_URL = import.meta.env.MODE === 'development'
   : 'https://res.cloudinary.com/mmuummth/image/upload/';
 
 // 🌟 NEW SUB-COMPONENT: Manages its own 2-second image rotation loop independently
+// src/components/Events.jsx
+
 const EventCard = ({ event, IMAGE_BASE_URL, handleCardClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Compile all available assets (cover + gallery array items) into one list
+  // Compile cover and gallery array items into one list
   const resolvedCover = event.cover_image 
     ? (event.cover_image.startsWith('http') ? event.cover_image : `${IMAGE_BASE_URL}${event.cover_image}`)
     : null;
@@ -22,17 +24,17 @@ const EventCard = ({ event, IMAGE_BASE_URL, handleCardClick }) => {
     img.startsWith('http') ? img : `${IMAGE_BASE_URL}${img}`
   );
 
-  const imagesList = [resolvedCover, ...resolvedGallery].filter(Boolean);
-  const finalImages = imagesList.length > 0 ? imagesList : ['https://via.placeholder.com/800x400'];
+  const finalImages = [resolvedCover, ...resolvedGallery].filter(Boolean);
+  const imagesToShow = finalImages.length > 0 ? finalImages : ['https://via.placeholder.com/800x400'];
 
-  // 2-second rotation lifecycle rule
+  // Keep it at 2.5 or 3 seconds so the user has time to see the image between crossfades
   useEffect(() => {
-    if (finalImages.length <= 1) return;
+    if (imagesToShow.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev === finalImages.length - 1 ? 0 : prev + 1));
-    }, 2000); // ⏱️ Exactly 2 seconds
+      setCurrentImageIndex((prev) => (prev === imagesToShow.length - 1 ? 0 : prev + 1));
+    }, 3000); // ⏱️ Changed to 3000ms for a more readable pacing cadence
     return () => clearInterval(interval);
-  }, [finalImages]);
+  }, [imagesToShow]);
 
   return (
     <div 
@@ -47,19 +49,29 @@ const EventCard = ({ event, IMAGE_BASE_URL, handleCardClick }) => {
         transition: 'transform 0.2s ease' 
       }}
     >
-      {/* Dynamic image element that smoothly flips through targets */}
-      <img 
-        src={finalImages[currentImageIndex]} 
-        alt={event.title} 
-        style={{ 
-          width: '100%', 
-          height: '200px', 
-          objectFit: 'cover',
-          transition: 'opacity 0.4s ease-in-out' // Elegant fading transition hint
-        }} 
-      /> 
+      {/* 🌟 SMOOTH CROSSFADE CONTAINER */}
+      <div style={{ position: 'relative', width: '100%', height: '200px', background: '#f4f6f9' }}>
+        {imagesToShow.map((imgSrc, idx) => (
+          <img 
+            key={idx}
+            src={imgSrc} 
+            alt={`${event.title} view ${idx}`} 
+            style={{ 
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%', 
+              height: '100%', 
+              objectFit: 'cover',
+              opacity: currentImageIndex === idx ? 1 : 0, // 🌟 Dynamic Opacity Switch
+              transition: 'opacity 0.8s ease-in-out',     // 🌟 0.8s Hardware-Accelerated Fade
+              zIndex: currentImageIndex === idx ? 2 : 1
+            }} 
+          />
+        ))}
+      </div>
 
-      <div style={{ padding: '1.5rem' }}>
+      <div style={{ padding: '1.5rem', position: 'relative', zIndex: 5, background: '#fff' }}>
         <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: 'bold', textTransform: 'uppercase' }}>
           {event.event_type}
         </span>
