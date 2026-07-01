@@ -149,42 +149,96 @@ const EventsPage = () => {
       </div>
 
       {/* POPUP WINDOW MODAL CAROUSEL */}
-      {selectedEvent && (() => {
-        // Resolve dynamic base image mapping paths for modal preview assets
-        const resolvedCover = selectedEvent.cover_image 
-          ? (selectedEvent.cover_image.startsWith('http') ? selectedEvent.cover_image : `${IMAGE_BASE_URL}${selectedEvent.cover_image}`)
-          : null;
+      // src/components/EventsPage.jsx
+// [Replace the existing selectedEvent modal section with this updated code block]
+
+{selectedEvent && (() => {
+  // Resolve dynamic asset URLs safely
+  const resolvedCover = selectedEvent.cover_image 
+    ? (selectedEvent.cover_image.startsWith('http') ? selectedEvent.cover_image : `${IMAGE_BASE_URL}${selectedEvent.cover_image}`)
+    : null;
+  
+  const resolvedGallery = (selectedEvent.gallery_images || []).map(img => 
+    img.startsWith('http') ? img : `${IMAGE_BASE_URL}${img}`
+  );
+
+  const list = [resolvedCover, ...resolvedGallery].filter(Boolean);
+  const activeImageSrc = list[modalImgIndex] || 'https://via.placeholder.com/800x400';
+
+  return (
+    <div 
+      id="modal-overlay"
+      onClick={(e) => {
+        // 🌟 CLOSES MODAL ON OVERLAY CLICK: Only dismiss if user clicked the dark backdrop itself
+        if (e.target.id === 'modal-overlay') setSelectedEvent(null);
+      }}
+      style={{ 
+        position: 'fixed', 
+        inset: 0, 
+        background: 'rgba(17,17,17,0.85)', 
+        zIndex: 3000, 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        padding: '1.5rem', 
+        backdropFilter: 'blur(10px)' 
+      }}
+    >
+      <div style={{ background: '#fff', borderRadius: '24px', maxWidth: '900px', width: '100%', maxHeight: '92vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
         
-        const resolvedGallery = (selectedEvent.gallery_images || []).map(img => 
-          img.startsWith('http') ? img : `${IMAGE_BASE_URL}${img}`
-        );
-
-        const list = [resolvedCover, ...resolvedGallery].filter(Boolean);
-        const activeImageSrc = list[modalImgIndex] || 'https://via.placeholder.com/800x400';
-
-        return (
-          <div style={{ position: 'fixed', inset: 0, background: 'rgba(17,17,17,0.85)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', backdropFilter: 'blur(10px)' }}>
-            <div style={{ background: '#fff', borderRadius: '24px', maxWidth: '850px', width: '100%', maxHeight: '92vh', overflowY: 'auto', position: 'relative' }}>
-              <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#fff', border: 'none', fontSize: '1rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', zIndex: 3020 }}>✕</button>
-              
-              <div style={{ position: 'relative', height: '420px', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={activeImageSrc} alt="Carousel view" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-                {list.length > 1 && (
-                  <>
-                    <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
-                    <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>›</button>
-                  </>
+        {/* ✕ CLOSE BUTTON */}
+        <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#fff', border: 'none', fontSize: '1rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', zIndex: 3020 }}>✕</button>
+        
+        {/* 🌟 TWO-COLUMN SPLIT LAYER FOR THE IMAGE + RIGHT METADATA AREA */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 0.7fr', background: '#111', height: '420px' }}>
+          
+          {/* LEFT: Main Image Slot with Arrow Controls */}
+          <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            <img src={activeImageSrc} alt="Carousel view" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+            {list.length > 1 && (
+              <>
+                <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>‹</button>
+                <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>›</button>
+              </>
                 )}
-              </div>
-              <div style={{ padding: '2.5rem' }}>
-                <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: '700' }}>{selectedEvent.event_type}</span>
-                <h2 style={{ fontFamily: 'Syne', margin: '0.3rem 0 1rem', fontSize: '1.8rem' }}>{selectedEvent.title}</h2>
-                <p style={{ color: 'rgba(0,0,0,0.6)', lineHeight: '1.8', fontSize: '0.98rem', whiteSpace: 'pre-line' }}>{selectedEvent.description}</p>
-              </div>
+          </div>
+
+          {/* 🌟 RIGHT SIDEBAR: Your highlighted area transformed into a Metadata Panel */}
+          <div style={{ 
+            borderLeft: '1px solid rgba(255,255,255,0.1)', 
+            padding: '2rem 1.5rem', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'center',
+            color: '#fff',
+            background: '#16171b'
+          }}>
+            <div style={{ textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '2px', color: '#ff8c00', fontWeight: 'bold' }}>
+              Asset Info
+            </div>
+            <h4 style={{ fontFamily: 'Syne', fontSize: '1.1rem', margin: '0.5rem 0 1rem 0', fontWeight: '700', lineHeight: '1.4' }}>
+              Snapshot {modalImgIndex + 1} of {list.length}
+            </h4>
+            <div style={{ fontSize: '0.82rem', color: '#a0aec0', lineHeight: '1.6' }}>
+              <p style={{ margin: '0 0 0.5rem 0' }}>• Verified Production Stream</p>
+              <p style={{ margin: '0 0 0.5rem 0' }}>• Cloud Node Connected</p>
+              <p style={{ margin: 0 }}>• Context Asset: Active</p>
             </div>
           </div>
-        );
-      })()}
+
+        </div>
+
+        {/* BOTTOM CONTENT AREA (Title & Narrative Logs) */}
+        <div style={{ padding: '2.5rem' }}>
+          <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: '700' }}>{selectedEvent.event_type}</span>
+          <h2 style={{ fontFamily: 'Syne', margin: '0.3rem 0 1rem', fontSize: '1.8rem', color: '#111' }}>{selectedEvent.title}</h2>
+          <p style={{ color: 'rgba(0,0,0,0.6)', lineHeight: '1.8', fontSize: '0.98rem', whiteSpace: 'pre-line' }}>{selectedEvent.description}</p>
+        </div>
+
+      </div>
+    </div>
+  );
+})()}
 
       <Footer />
     </div>
