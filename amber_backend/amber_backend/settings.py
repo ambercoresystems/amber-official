@@ -75,6 +75,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     # Production Netlify App and Domains (Always include https://)
     "https://resilient-cassata-6e3f72.netlify.app",
+    "https://amber-website.netlify.app",
     "https://ambercorsystems.com",
     "https://www.ambercorsystems.com",  # <-- Added the missing comma here!
     
