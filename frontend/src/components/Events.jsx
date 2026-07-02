@@ -135,7 +135,6 @@ const Events = ({ openModalDirectly }) => {
 
   return (
     <section id="events" style={{ padding: '4rem 4%', background: '#fff', width: '100%' }}>
-      {/* 🌟 RESPONSIVE WRAPPED CLAMPED TYPOGRAPHY HEADINGS */}
       <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '2.5rem', fontSize: 'clamp(1.6rem, 5vw, 2.5rem)' }}>
         {getDynamicHeading()}
       </h2>
@@ -143,7 +142,6 @@ const Events = ({ openModalDirectly }) => {
       {loading ? (
         <div style={{ textAlign: 'center', color: '#ff8c00' }}>Syncing dashboard data...</div>
       ) : (
-        /* 🌟 MOBILE RESPONSIVE ADAPTIVE AUTO-FIT CSS GRID ENGINE */
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
           {displayedEvents.map((event) => (
             <EventCard 
@@ -171,16 +169,41 @@ const Events = ({ openModalDirectly }) => {
         return (
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(17,17,17,0.85)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', backdropFilter: 'blur(10px)' }}>
             <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '850px', width: '100%', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
-              <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#fff', border: 'none', fontSize: '1rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', zIndex: 3020 }}>✕</button>
-              <div style={{ position: 'relative', height: '320px', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(255,255,255,0.8)', border: 'none', fontSize: '1rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', zIndex: 3020 }}>✕</button>
+              
+              {/* IMAGE WINDOW CONTAINER WITH OVERLAY */}
+              <div style={{ position: 'relative', height: '450px', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                 <img src={activeImgSrc} alt="Preview asset" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                
                 {list.length > 1 && (
                   <>
-                    <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer' }}>‹</button>
-                    <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer' }}>›</button>
+                    <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', zIndex: 10 }}>‹</button>
+                    <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', zIndex: 10 }}>›</button>
                   </>
                 )}
+
+                {/* RIGHT SIDE BOTTOM TEXT OVERLAY */}
+                <div style={{ 
+                  position: 'absolute', 
+                  bottom: '1rem', 
+                  right: '1rem', 
+                  background: 'rgba(0, 0, 0, 0.65)', 
+                  padding: '1rem 1.5rem', 
+                  borderRadius: '12px', 
+                  maxWidth: '300px', 
+                  textAlign: 'right',
+                  backdropFilter: 'blur(4px)',
+                  zIndex: 15
+                }}>
+                  <span style={{ fontSize: '0.65rem', color: '#ff8c00', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    {selectedEvent.event_type}
+                  </span>
+                  <h4 style={{ fontFamily: 'Syne', margin: '0.2rem 0 0', fontSize: '1rem', fontWeight: 'bold', color: '#fff' }}>
+                    {selectedEvent.title}
+                  </h4>
+                </div>
               </div>
+
               <div style={{ padding: '2rem' }}>
                 <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: '700' }}>{selectedEvent.event_type}</span>
                 <h2 style={{ fontFamily: 'Syne', margin: '0.3rem 0 1rem', fontSize: '1.5rem', fontWeight: 'bold' }}>{selectedEvent.title}</h2>

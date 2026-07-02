@@ -183,55 +183,52 @@ const EventsPage = () => {
               backdropFilter: 'blur(10px)' 
             }}
           >
-            <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '900px', width: '100%', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
+            <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '900px', width: '100%', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.3)', overflow: 'hidden' }}>
               
               {/* CLOSE BUTTON */}
               <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: '#fff', border: 'none', fontSize: '0.9rem', cursor: 'pointer', width: '32px', height: '32px', borderRadius: '50%', boxShadow: '0 4px 10px rgba(0,0,0,0.15)', zIndex: 3020 }}>✕</button>
               
-              {/* RESPONSIVE FLEX LAYOUT ENGINE FOR POPUP TOP GRID */}
-              <div style={{ display: 'flex', flexDirection: 'column', mdDirection: 'row', background: '#111', minHeight: '320px', flexWrap: 'wrap' }}>
+              {/* IMAGE FRAME CONTAINER ONLY */}
+              <div style={{ position: 'relative', width: '100%', height: '480px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#000' }}>
+                <img src={activeImageSrc} alt="Carousel view" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
                 
-                {/* IMAGE FRAME CONTAINER */}
-                <div style={{ position: 'relative', flex: '1 1 320px', minHeight: '280px', maxHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#000' }}>
-                  <img src={activeImageSrc} alt="Carousel view" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-                  {list.length > 1 && (
-                    <>
-                      <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '0.75rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>‹</button>
-                      <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '0.75rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>›</button>
-                    </>
-                  )}
-                </div>
+                {list.length > 1 && (
+                  <>
+                    <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '0.75rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>‹</button>
+                    <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '0.75rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>›</button>
+                  </>
+                )}
 
-                {/* METADATA INFO SIDE PANEL */}
-                <div style={{ 
-                  flex: '1 1 240px',
-                  padding: '1.5rem', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justifyContent: 'center',
-                  color: '#fff',
-                  background: '#16171b',
-                  borderLeft: '1px solid rgba(255,255,255,0.05)'
+                {/* TEXT DETAILS DISPLAYED ON IMAGE RIGHT SIDE BOTTOM */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '1rem',
+                  right: '1rem',
+                  background: 'rgba(22, 23, 27, 0.8)',
+                  padding: '1rem 1.5rem',
+                  borderRadius: '12px',
+                  maxWidth: '320px',
+                  textAlign: 'right',
+                  backdropFilter: 'blur(6px)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  zIndex: 15
                 }}>
-                  <div style={{ textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '2px', color: '#ff8c00', fontWeight: 'bold' }}>
+                  <div style={{ textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '1.5px', color: '#ff8c00', fontWeight: 'bold' }}>
                     EVENT DETAILS
                   </div>
-                  
-                  <h4 style={{ fontFamily: 'Syne', fontSize: '1rem', margin: '0.4rem 0 0.2rem 0', fontWeight: '700', lineHeight: '1.3', color: '#fff' }}>
+                  <h4 style={{ fontFamily: 'Syne', fontSize: '1.1rem', margin: '0.3rem 0 0.1rem 0', fontWeight: '700', color: '#fff' }}>
                     {selectedEvent.event_type} Record
                   </h4>
-
                   {selectedEvent.subtitle && (
-                    <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: '#ff8c00', fontStyle: 'italic', lineHeight: '1.3' }}>
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#ff8c00', fontStyle: 'italic' }}>
                       {selectedEvent.subtitle}
                     </p>
                   )}
                 </div>
-
               </div>
 
               {/* BOTTOM CONTENT AREA */}
-              <div style={{ padding: '1.5rem 2rem' }}>
+              <div style={{ padding: '2rem' }}>
                 <span style={{ fontSize: '0.7rem', color: '#ff8c00', fontWeight: '700', textTransform: 'uppercase' }}>{selectedEvent.event_type}</span>
                 <h2 style={{ fontFamily: 'Syne', margin: '0.2rem 0 0.75rem', fontSize: 'clamp(1.2rem, 3vw, 1.6rem)', color: '#111', fontWeight: 'bold' }}>{selectedEvent.title}</h2>
                 <p style={{ color: 'rgba(0,0,0,0.6)', lineHeight: '1.7', fontSize: '0.9rem', whiteSpace: 'pre-line' }}>{selectedEvent.description}</p>
