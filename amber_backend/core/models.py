@@ -6,11 +6,12 @@ class Event(models.Model):
         ('Workshop', 'Workshop Conducted'),
         ('Attended Event', 'Attended Event'),
         ('Inauguration', 'Inauguration Ceremony'),
-        ('Conference', 'Conference Presentation'),  # 🌟 Added
-        ('Fest', 'Fest'),        # 🌟 Added
-        ('Special Day', 'Special Day Celebration'),  # 🌟 Added
+        ('Conference', 'Conference Presentation'),
+        ('Fest', 'Fest'),
+        ('Special Day', 'Special Day Celebration'),
     ]
     title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, blank=True, null=True) # 🌟 NEW FIELD ADDED
     event_type = models.CharField(max_length=50, choices=EVENT_TYPES, default='Workshop')
     date = models.DateField()
     description = models.TextField()

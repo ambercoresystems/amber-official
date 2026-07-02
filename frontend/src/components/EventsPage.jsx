@@ -1,4 +1,4 @@
-// src/components/EventsPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Events from './Events';
@@ -149,8 +149,8 @@ const EventsPage = () => {
       </div>
 
       {/* POPUP WINDOW MODAL CAROUSEL */}
-      // src/components/EventsPage.jsx
-// [Replace the existing selectedEvent modal section with this updated code block]
+      
+
 
 {selectedEvent && (() => {
   // Resolve dynamic asset URLs safely
@@ -189,7 +189,7 @@ const EventsPage = () => {
         {/* ✕ CLOSE BUTTON */}
         <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#fff', border: 'none', fontSize: '1rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', zIndex: 3020 }}>✕</button>
         
-        {/* 🌟 TWO-COLUMN SPLIT LAYER FOR THE IMAGE + RIGHT METADATA AREA */}
+        {/* TWO-COLUMN SPLIT LAYER FOR THE IMAGE + RIGHT METADATA AREA */}
         <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 0.7fr', background: '#111', height: '420px' }}>
           
           {/* LEFT: Main Image Slot with Arrow Controls */}
@@ -200,10 +200,10 @@ const EventsPage = () => {
                 <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>‹</button>
                 <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>›</button>
               </>
-                )}
+            )}
           </div>
 
-          {/* 🌟 RIGHT SIDEBAR: Your highlighted area transformed into a Metadata Panel */}
+          {/* RIGHT SIDEBAR: Transformed dynamic layout metadata sidebar panel panel */}
           <div style={{ 
             borderLeft: '1px solid rgba(255,255,255,0.1)', 
             padding: '2rem 1.5rem', 
@@ -214,15 +214,24 @@ const EventsPage = () => {
             background: '#16171b'
           }}>
             <div style={{ textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '2px', color: '#ff8c00', fontWeight: 'bold' }}>
-              Asset Info
+              Engagement Meta
             </div>
-            <h4 style={{ fontFamily: 'Syne', fontSize: '1.1rem', margin: '0.5rem 0 1rem 0', fontWeight: '700', lineHeight: '1.4' }}>
-              Snapshot {modalImgIndex + 1} of {list.length}
+            
+            <h4 style={{ fontFamily: 'Syne', fontSize: '1.1rem', margin: '0.5rem 0 0.3rem 0', fontWeight: '700', lineHeight: '1.4', color: '#fff' }}>
+              {selectedEvent.event_type} Record
             </h4>
-            <div style={{ fontSize: '0.82rem', color: '#a0aec0', lineHeight: '1.6' }}>
-              <p style={{ margin: '0 0 0.5rem 0' }}>• Verified Production Stream</p>
-              <p style={{ margin: '0 0 0.5rem 0' }}>• Cloud Node Connected</p>
-              <p style={{ margin: 0 }}>• Context Asset: Active</p>
+
+            {/* 🌟 NEW SUBTITLE FIELD RENDERING: Checks database and dynamically outputs here */}
+            {selectedEvent.subtitle && (
+              <p style={{ margin: '0 0 1rem 0', fontSize: '0.85rem', color: '#ff8c00', fontStyle: 'italic', lineHeight: '1.3' }}>
+                {selectedEvent.subtitle}
+              </p>
+            )}
+
+            <div style={{ fontSize: '0.82rem', color: '#a0aec0', lineHeight: '1.6', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.8rem' }}>
+              <p style={{ margin: '0 0 0.5rem 0' }}>• <strong>Timeline:</strong> {selectedEvent.date}</p>
+              <p style={{ margin: '0 0 0.5rem 0' }}>• <strong>File Index:</strong> {modalImgIndex + 1} of {list.length}</p>
+              <p style={{ margin: 0 }}>• <strong>Storage Status:</strong> Live Cloud Node</p>
             </div>
           </div>
 

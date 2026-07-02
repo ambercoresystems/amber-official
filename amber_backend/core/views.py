@@ -29,19 +29,34 @@ def handle_events(request):
     if request.method == 'GET':
         events = []
         for e in Event.objects.all().order_by('-date'):
+            # Safe parsing for cover urls
+            cover_url = e.cover_image.url if e.cover_image else ""
+            if cover_url and not cover_url.startswith('http'):
+                cover_url = request.build_absolute_uri(cover_url)
+
+            # Safe parsing for sub-gallery lists
+            processed_gallery = []
+            for img in e.gallery_images:
+                if img and img.startswith('http'):
+                    processed_gallery.append(img)
+                elif img:
+                    processed_gallery.append(request.build_absolute_uri(img))
+
             events.append({
                 "id": e.id,
                 "title": e.title,
+                "subtitle": e.subtitle or "",  # 🌟 Dynamic subtitle inclusion
                 "event_type": e.event_type,
                 "date": e.date.strftime('%Y-%m-%d'),
                 "description": e.description,
-                "cover_image": request.build_absolute_uri(e.cover_image.url) if e.cover_image else "",
-                "gallery_images": [request.build_absolute_uri(img) for img in e.gallery_images]
+                "cover_image": cover_url,
+                "gallery_images": processed_gallery
             })
         return JsonResponse(events, safe=False)
         
     elif request.method == 'POST':
         title = request.POST.get('title')
+        subtitle = request.POST.get('subtitle')  # 🌟 Read new field
         event_type = request.POST.get('type')
         date = request.POST.get('date')
         description = request.POST.get('description')
@@ -55,8 +70,13 @@ def handle_events(request):
             saved_gallery_urls.append(file_url)
 
         event = Event.objects.create(
-            title=title, event_type=event_type, date=date,
-            description=description, cover_image=cover_image, gallery_images=saved_gallery_urls
+            title=title, 
+            subtitle=subtitle,  # 🌟 Assign new field
+            event_type=event_type, 
+            date=date,
+            description=description, 
+            cover_image=cover_image, 
+            gallery_images=saved_gallery_urls
         )
         return JsonResponse({"message": "Event added!", "id": event.id}, status=201)
 
@@ -70,6 +90,7 @@ def handle_single_event(request, pk):
     
     if request.method == 'PUT':
         event.title = request.POST.get('title', event.title)
+        event.subtitle = request.POST.get('subtitle', event.subtitle)  # 🌟 Update field handler
         event.event_type = request.POST.get('type', event.event_type)
         event.date = request.POST.get('date', event.date)
         event.description = request.POST.get('description', event.description)
