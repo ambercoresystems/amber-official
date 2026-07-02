@@ -15,8 +15,8 @@ const AdminPanel = () => {
   const [editingId, setEditingId] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Dynamic form entry records states
-  const [eventForm, setEventForm] = useState({ title: '', type: 'Workshop', date: '', description: '' });
+  // Dynamic form entry records states — 🌟 UPDATED WITH SUBTITLE STATE
+  const [eventForm, setEventForm] = useState({ title: '', subtitle: '', type: 'Workshop', date: '', description: '' });
   const [coverFile, setCoverFile] = useState(null);
   const [galleryFiles, setGalleryFiles] = useState([]);
 
@@ -42,7 +42,8 @@ const AdminPanel = () => {
   };
 
   const resetFormState = () => {
-    setEventForm({ title: '', type: 'Workshop', date: '', description: '' });
+    // 🌟 RESET SUBTITLE PROPERTY CLEAR INSTRUCTION ADDED
+    setEventForm({ title: '', subtitle: '', type: 'Workshop', date: '', description: '' });
     setCoverFile(null);
     setGalleryFiles([]);
     setEditingId(null);
@@ -55,6 +56,7 @@ const AdminPanel = () => {
     setIsSubmitting(true);
     const formData = new FormData();
     formData.append('title', eventForm.title);
+    formData.append('subtitle', eventForm.subtitle); // 🌟 STRAPPED DIRECTLY TO NETWORK PAYLOAD
     formData.append('type', eventForm.type);
     formData.append('date', eventForm.date);
     formData.append('description', eventForm.description);
@@ -80,24 +82,30 @@ const AdminPanel = () => {
 
   const startEdit = (item) => {
     setEditingId(item.id);
-    setEventForm({ title: item.title, type: item.event_type, date: item.date, description: item.description });
+    // 🌟 PARSES EXISTING MODEL SUBTITLE INSTANCES INTO STATE FORM BINDING
+    setEventForm({ 
+      title: item.title, 
+      subtitle: item.subtitle || '', 
+      type: item.event_type, 
+      date: item.date, 
+      description: item.description 
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Permanently drop this operational event row out of sqlite3?")) return;
+    if (!window.confirm("Permanently drop this operational event row out of database?")) return;
     const res = await fetch(`${BACKEND_API}/api/events/${id}/`, { method: 'DELETE', credentials: 'include' });
     if (res.ok) { fetchAllEvents(); if (editingId === id) resetFormState(); }
     else { alert('Failed to clear row item.'); }
   };
 
-  // Filter records dynamically based on active search bar queries
   const filteredEvents = events.filter(ev => 
     ev.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (ev.subtitle && ev.subtitle.toLowerCase().includes(searchTerm.toLowerCase())) ||
     ev.event_type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Compute live analytical statistics 
   const totalWorkshops = events.filter(e => e.event_type === 'Workshop').length;
   const totalAttended = events.filter(e => e.event_type === 'Attended Event').length;
 
@@ -155,8 +163,8 @@ const AdminPanel = () => {
           
           {/* SEARCH BAR PANEL CONTROL HEADER */}
           <div style={{ background: '#fff', padding: '1rem 1.5rem', borderRadius: '16px', border: '1px solid #eaedf3', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontSize: '1.2rem' }}>🔍</span>
-            <input type="text" placeholder="Search database elements dynamically by name or type reference..." value={searchTerm} onChange={e => setSearchFilter(e.target.value)} style={{ width: '100%', border: 'none', outline: 'none', fontSize: '0.9rem', color: '#111' }} />
+            <span>🔍</span>
+            <input type="text" placeholder="Search database elements dynamically by name, type reference, or subtitle..." value={searchTerm} onChange={e => setSearchFilter(e.target.value)} style={{ width: '100%', border: 'none', outline: 'none', fontSize: '0.9rem', color: '#111' }} />
           </div>
 
           <div style={{ background: '#fff', borderRadius: '24px', padding: '2rem', border: '1px solid #eaedf3', boxShadow: '0 4px 25px rgba(0,0,0,0.01)' }}>
@@ -169,13 +177,16 @@ const AdminPanel = () => {
                     <th style={{ padding: '0 1rem' }}>Engagement Instance Title</th>
                     <th style={{ padding: '0 1rem' }}>Class</th>
                     <th style={{ padding: '0 1rem' }}>Execution Date</th>
-                    <th style={{ padding: '0 1rem', textAlignment: 'right' }}>Controls</th>
+                    <th style={{ padding: '0 1rem' }}>Controls</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredEvents.map(item => (
-                    <tr key={item.id} className="table-row-hover" style={{ background: '#f8fafc', borderRadius: '12px', transition: '0.2s' }}>
-                      <td style={{ padding: '1.2rem 1rem', fontWeight: '700', color: '#111', fontSize: '0.92rem', borderRadius: '12px 0 0 12px' }}>{item.title}</td>
+                    <tr key={item.id} style={{ background: '#f8fafc', borderRadius: '12px' }}>
+                      <td style={{ padding: '1.2rem 1rem', borderRadius: '12px 0 0 12px' }}>
+                        <div style={{ fontWeight: '700', color: '#111', fontSize: '0.92rem' }}>{item.title}</div>
+                        {item.subtitle && <div style={{ fontSize: '0.78rem', color: '#ff8c00', marginTop: '0.15rem', fontStyle: 'italic' }}>{item.subtitle}</div>}
+                      </td>
                       <td style={{ padding: '1.2rem 1rem', fontSize: '0.85rem' }}>
                         <span style={{ background: item.event_type === 'Workshop' ? 'rgba(255,140,0,0.1)' : '#eee', color: item.event_type === 'Workshop' ? '#ff8c00' : '#111', padding: '4px 10px', borderRadius: '6px', fontWeight: 'bold' }}>
                           {item.event_type}
@@ -200,7 +211,7 @@ const AdminPanel = () => {
         <div style={{ position: 'sticky', top: '120px' }}>
           <form onSubmit={handleEventSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem', background: '#fff', padding: '2.5rem', borderRadius: '24px', border: '1px solid #eaedf3', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
             <h3 style={{ fontFamily: 'var(--font-heading)', margin: '0 0 0.5rem 0', fontSize: '1.3rem', color: '#111' }}>
-              {editingId ? "⚡ Modify Entry Mode" : "📝 Construct New Matrix"}
+              {editingId ? "📝 Modify Entry Mode" : "✨ Construct New Matrix"}
             </h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -208,9 +219,14 @@ const AdminPanel = () => {
               <input type="text" placeholder="e.g. Machine Learning Deep Dive" value={eventForm.title} onChange={e => setEventForm({...eventForm, title: e.target.value})} style={{ padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #dcdfe6', fontSize: '0.9rem', outline: 'none' }} required />
             </div>
 
+            {/* 🌟 NEW SUBTITLE INPUT BLOCK ADDED DIRECTLY BELOW TITLE */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <label style={{ fontWeight: '700', fontSize: '0.8rem', color: '#555', textTransform: 'uppercase' }}>Engagement Subtitle headline (Optional)</label>
+              <input type="text" placeholder="e.g. Conducted at IIIT Kottayam" value={eventForm.subtitle} onChange={e => setEventForm({...eventForm, subtitle: e.target.value})} style={{ padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #dcdfe6', fontSize: '0.9rem', outline: 'none' }} />
+            </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                {/* Inside src/components/AdminPanel.jsx Form UI Component */}
                 <label style={{ fontWeight: '700', fontSize: '0.8rem', color: '#555', textTransform: 'uppercase' }}>Classification</label>
                 <select 
                   value={eventForm.type} 
@@ -219,10 +235,10 @@ const AdminPanel = () => {
                 >
                   <option value="Workshop">Workshop Conducted</option>
                   <option value="Attended Event">Attended Event</option>
-                  <option value="Inauguration">Inauguration Ceremony</option>   {/* 🌟 Added */}
-                  <option value="Fest">College/Technical Fest</option>         {/* 🌟 Added */}
+                  <option value="Inauguration">Inauguration Ceremony</option>
+                  <option value="Fest">College/Technical Fest</option>
                   <option value="Special Day">Special Day Celebration</option>
-                  <option value="Conference">Conference Presentation</option> {/* 🌟 Added */}
+                  <option value="Conference">Conference Presentation</option>
                 </select>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -233,7 +249,7 @@ const AdminPanel = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               <label style={{ fontWeight: '700', fontSize: '0.8rem', color: '#555', textTransform: 'uppercase' }}>Scope Logs Narrative</label>
-              <textarea placeholder="Describe execution bounds context text rules..." value={eventForm.description} onChange={e => setEventForm({...eventForm, description: e.target.value})} style={{ padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #dcdfe6', minHeight: '110px', maxHeigh: '200px', fontSize: '0.9rem', outline: 'none', resize: 'vertical' }} required />
+              <textarea placeholder="Describe execution bounds context text rules..." value={eventForm.description} onChange={e => setEventForm({...eventForm, description: e.target.value})} style={{ padding: '0.85rem 1rem', borderRadius: '10px', border: '1px solid #dcdfe6', minHeight: '110px', maxHeight: '200px', fontSize: '0.9rem', outline: 'none', resize: 'vertical' }} required />
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
