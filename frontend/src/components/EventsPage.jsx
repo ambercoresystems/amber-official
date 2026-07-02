@@ -159,6 +159,9 @@ const EventsPage = () => {
 // src/components/EventsPage.jsx
 // [Replace the existing selectedEvent modal section with this unified overlay design]
 
+      // src/components/EventsPage.jsx
+// [Replace the existing selectedEvent modal section with this unified overlay design]
+
 {selectedEvent && (() => {
   const resolvedCover = selectedEvent.cover_image 
     ? (selectedEvent.cover_image.startsWith('http') ? selectedEvent.cover_image : `${IMAGE_BASE_URL}${selectedEvent.cover_image}`)
