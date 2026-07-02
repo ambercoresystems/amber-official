@@ -1,4 +1,4 @@
-
+// src/components/EventsPage.jsx
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Events from './Events';
@@ -49,19 +49,23 @@ const EventsPage = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', width: '100%', overflowX: 'hidden' }}>
       <Navbar />
 
       {/* HERO HEADER AREA */}
       {carouselEvents.length > 0 && (
-        <div style={{ position: 'relative', width: '100%', height: '550px', background: '#111', marginTop: '70px', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%', height: 'auto', minHeight: '450px', background: '#111', marginTop: '70px', overflow: 'hidden' }}>
           {carouselEvents.map((ev, idx) => (
             <div key={ev.id} style={{
-              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              position: idx === activeIndex ? 'relative' : 'absolute',
+              inset: 0,
+              width: '100%',
+              height: idx === activeIndex ? '550px' : '100%',
               opacity: activeIndex === idx ? 1 : 0,
-              transition: 'opacity 0.8s ease-in-out', zIndex: activeIndex === idx ? 1 : 0
+              transition: 'opacity 0.8s ease-in-out',
+              zIndex: activeIndex === idx ? 1 : 0
             }}>
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%)', zIndex: 2 }}></div>
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 100%)', zIndex: 2 }}></div>
               <img 
                 src={
                   ev.cover_image 
@@ -72,12 +76,12 @@ const EventsPage = () => {
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
               />              
               
-              <div style={{ position: 'absolute', bottom: '18%', left: '8%', zIndex: 3, maxWidth: '700px', color: '#fff' }}>
+              <div style={{ position: 'absolute', bottom: '12%', left: '5%', right: '5%', zIndex: 3, maxWidth: '700px', color: '#fff' }}>
                 <span style={{ 
                   color: '#ff8c00', 
-                  fontSize: '0.78rem', 
+                  fontSize: '0.72rem', 
                   fontWeight: '750', 
-                  letterSpacing: '2.5px', 
+                  letterSpacing: '2px', 
                   textTransform: 'uppercase',
                   fontFamily: 'var(--font-heading), "Syne", sans-serif'
                 }}>
@@ -86,9 +90,9 @@ const EventsPage = () => {
 
                 <h1 style={{ 
                   fontFamily: 'var(--font-heading), "Syne", sans-serif', 
-                  fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', 
+                  fontSize: 'clamp(1.5rem, 4vw, 2.8rem)', 
                   fontWeight: '800', 
-                  margin: '0.6rem 0 1.5rem', 
+                  margin: '0.5rem 0 1.2rem', 
                   lineHeight: '1.25', 
                   letterSpacing: '-0.01em',
                   textTransform: 'none'
@@ -100,15 +104,15 @@ const EventsPage = () => {
                   background: '#fff', 
                   color: '#111', 
                   border: 'none', 
-                  padding: '0.85rem 2rem', 
+                  padding: '0.75rem 1.5rem', 
                   borderRadius: '50px', 
                   fontFamily: 'var(--font-main), "DM Sans", sans-serif',
                   fontWeight: '700', 
-                  fontSize: '0.82rem', 
+                  fontSize: '0.8rem', 
                   cursor: 'pointer', 
                   display: 'flex', 
                   alignItems: 'center', 
-                  gap: '12px', 
+                  gap: '10px', 
                   boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
                   transition: 'transform 0.2s ease'
                 }}>
@@ -116,26 +120,26 @@ const EventsPage = () => {
                   <span style={{ 
                     background: '#ff8c00', 
                     color: '#fff', 
-                    width: '20px', 
-                    height: '20px', 
+                    width: '18px', 
+                    height: '18px', 
                     borderRadius: '50%', 
                     display: 'flex', 
                     alignItems: 'center', 
                     justifyContent: 'center', 
-                    fontSize: '0.65rem' 
+                    fontSize: '0.6rem' 
                   }}>→</span>
                 </button>
               </div>
             </div>
           ))}
 
-          {/* 🌟 PRESTIGE CONTROLS: Arrow-based pagination buttons replacement */}
+          {/* ARROW CONTROLS */}
           {carouselEvents.length > 1 && (
-            <div style={{ position: 'absolute', bottom: '2.5rem', right: '5%', zIndex: 10, display: 'flex', gap: '1rem' }}>
-              <button onClick={handlePrev} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', width: '45px', height: '45px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)', transition: '0.3s' }}>
+            <div style={{ position: 'absolute', bottom: '1.5rem', right: '5%', zIndex: 10, display: 'flex', gap: '0.75rem' }}>
+              <button onClick={handlePrev} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', width: '38px', height: '38px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)', transition: '0.3s' }}>
                 ‹
               </button>
-              <button onClick={handleNext} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', width: '45px', height: '45px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)', transition: '0.3s' }}>
+              <button onClick={handleNext} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', width: '38px', height: '38px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)', transition: '0.3s' }}>
                 ›
               </button>
             </div>
@@ -143,111 +147,100 @@ const EventsPage = () => {
         </div>
       )}
 
-      {/* DYNAMIC CONTENT GRID LAYER */}
-      <div style={{ flexGrow: 1 }}>
+      {/* COMPACT CONTENT GRID LAYER */}
+      <div style={{ flexGrow: 1, width: '100%' }}>
         <Events openModalDirectly={openModal} />
       </div>
 
       {/* POPUP WINDOW MODAL CAROUSEL */}
-      
-
-
-{selectedEvent && (() => {
-  // Resolve dynamic asset URLs safely
-  const resolvedCover = selectedEvent.cover_image 
-    ? (selectedEvent.cover_image.startsWith('http') ? selectedEvent.cover_image : `${IMAGE_BASE_URL}${selectedEvent.cover_image}`)
-    : null;
-  
-  const resolvedGallery = (selectedEvent.gallery_images || []).map(img => 
-    img.startsWith('http') ? img : `${IMAGE_BASE_URL}${img}`
-  );
-
-  const list = [resolvedCover, ...resolvedGallery].filter(Boolean);
-  const activeImageSrc = list[modalImgIndex] || 'https://via.placeholder.com/800x400';
-
-  return (
-    <div 
-      id="modal-overlay"
-      onClick={(e) => {
-        // 🌟 CLOSES MODAL ON OVERLAY CLICK: Only dismiss if user clicked the dark backdrop itself
-        if (e.target.id === 'modal-overlay') setSelectedEvent(null);
-      }}
-      style={{ 
-        position: 'fixed', 
-        inset: 0, 
-        background: 'rgba(17,17,17,0.85)', 
-        zIndex: 3000, 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        padding: '1.5rem', 
-        backdropFilter: 'blur(10px)' 
-      }}
-    >
-      <div style={{ background: '#fff', borderRadius: '24px', maxWidth: '900px', width: '100%', maxHeight: '92vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
+      {selectedEvent && (() => {
+        const resolvedCover = selectedEvent.cover_image 
+          ? (selectedEvent.cover_image.startsWith('http') ? selectedEvent.cover_image : `${IMAGE_BASE_URL}${selectedEvent.cover_image}`)
+          : null;
         
-        {/* ✕ CLOSE BUTTON */}
-        <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#fff', border: 'none', fontSize: '1rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', zIndex: 3020 }}>✕</button>
-        
-        {/* TWO-COLUMN SPLIT LAYER FOR THE IMAGE + RIGHT METADATA AREA */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 0.7fr', background: '#111', height: '420px' }}>
-          
-          {/* LEFT: Main Image Slot with Arrow Controls */}
-          <div style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-            <img src={activeImageSrc} alt="Carousel view" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-            {list.length > 1 && (
-              <>
-                <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>‹</button>
-                <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '1rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '40px', height: '40px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>›</button>
-              </>
-            )}
-          </div>
+        const resolvedGallery = (selectedEvent.gallery_images || []).map(img => 
+          img.startsWith('http') ? img : `${IMAGE_BASE_URL}${img}`
+        );
 
-          {/* RIGHT SIDEBAR: Transformed dynamic layout metadata sidebar panel panel */}
-          <div style={{ 
-            borderLeft: '1px solid rgba(255,255,255,0.1)', 
-            padding: '2rem 1.5rem', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            justifyContent: 'center',
-            color: '#fff',
-            background: '#16171b'
-          }}>
-            <div style={{ textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '2px', color: '#ff8c00', fontWeight: 'bold' }}>
-              EVENT DETAILS
+        const list = [resolvedCover, ...resolvedGallery].filter(Boolean);
+        const activeImageSrc = list[modalImgIndex] || 'https://via.placeholder.com/800x400';
+
+        return (
+          <div 
+            id="modal-overlay"
+            onClick={(e) => {
+              if (e.target.id === 'modal-overlay') setSelectedEvent(null);
+            }}
+            style={{ 
+              position: 'fixed', 
+              inset: 0, 
+              background: 'rgba(17,17,17,0.85)', 
+              zIndex: 3000, 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              padding: '1rem', 
+              backdropFilter: 'blur(10px)' 
+            }}
+          >
+            <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '900px', width: '100%', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
+              
+              {/* CLOSE BUTTON */}
+              <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: '#fff', border: 'none', fontSize: '0.9rem', cursor: 'pointer', width: '32px', height: '32px', borderRadius: '50%', boxShadow: '0 4px 10px rgba(0,0,0,0.15)', zIndex: 3020 }}>✕</button>
+              
+              {/* RESPONSIVE FLEX LAYOUT ENGINE FOR POPUP TOP GRID */}
+              <div style={{ display: 'flex', flexDirection: 'column', mdDirection: 'row', background: '#111', minHeight: '320px', flexWrap: 'wrap' }}>
+                
+                {/* IMAGE FRAME CONTAINER */}
+                <div style={{ position: 'relative', flex: '1 1 320px', minHeight: '280px', maxHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: '#000' }}>
+                  <img src={activeImageSrc} alt="Carousel view" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                  {list.length > 1 && (
+                    <>
+                      <button onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} style={{ position: 'absolute', left: '0.75rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>‹</button>
+                      <button onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} style={{ position: 'absolute', right: '0.75rem', background: 'rgba(255,255,255,0.2)', border: 'none', width: '36px', height: '36px', borderRadius: '50%', color: '#fff', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>›</button>
+                    </>
+                  )}
+                </div>
+
+                {/* METADATA INFO SIDE PANEL */}
+                <div style={{ 
+                  flex: '1 1 240px',
+                  padding: '1.5rem', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'center',
+                  color: '#fff',
+                  background: '#16171b',
+                  borderLeft: '1px solid rgba(255,255,255,0.05)'
+                }}>
+                  <div style={{ textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '2px', color: '#ff8c00', fontWeight: 'bold' }}>
+                    EVENT DETAILS
+                  </div>
+                  
+                  <h4 style={{ fontFamily: 'Syne', fontSize: '1rem', margin: '0.4rem 0 0.2rem 0', fontWeight: '700', lineHeight: '1.3', color: '#fff' }}>
+                    {selectedEvent.event_type} Record
+                  </h4>
+
+                  {selectedEvent.subtitle && (
+                    <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', color: '#ff8c00', fontStyle: 'italic', lineHeight: '1.3' }}>
+                      {selectedEvent.subtitle}
+                    </p>
+                  )}
+                </div>
+
+              </div>
+
+              {/* BOTTOM CONTENT AREA */}
+              <div style={{ padding: '1.5rem 2rem' }}>
+                <span style={{ fontSize: '0.7rem', color: '#ff8c00', fontWeight: '700', textTransform: 'uppercase' }}>{selectedEvent.event_type}</span>
+                <h2 style={{ fontFamily: 'Syne', margin: '0.2rem 0 0.75rem', fontSize: 'clamp(1.2rem, 3vw, 1.6rem)', color: '#111', fontWeight: 'bold' }}>{selectedEvent.title}</h2>
+                <p style={{ color: 'rgba(0,0,0,0.6)', lineHeight: '1.7', fontSize: '0.9rem', whiteSpace: 'pre-line' }}>{selectedEvent.description}</p>
+              </div>
+
             </div>
-            
-            <h4 style={{ fontFamily: 'Syne', fontSize: '1.1rem', margin: '0.5rem 0 0.3rem 0', fontWeight: '700', lineHeight: '1.4', color: '#fff' }}>
-              {selectedEvent.event_type} Record
-            </h4>
-
-            {/* 🌟 NEW SUBTITLE FIELD RENDERING: Checks database and dynamically outputs here */}
-            {selectedEvent.subtitle && (
-              <p style={{ margin: '0 0 1rem 0', fontSize: '0.85rem', color: '#ff8c00', fontStyle: 'italic', lineHeight: '1.3' }}>
-                {selectedEvent.subtitle}
-              </p>
-            )}
-
-            {/* <div style={{ fontSize: '0.82rem', color: '#a0aec0', lineHeight: '1.6', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.8rem' }}>
-              <p style={{ margin: '0 0 0.5rem 0' }}>• <strong>Timeline:</strong> {selectedEvent.date}</p>
-              <p style={{ margin: '0 0 0.5rem 0' }}>• <strong>File Index:</strong> {modalImgIndex + 1} of {list.length}</p>
-              <p style={{ margin: 0 }}>• <strong>Storage Status:</strong> Live Cloud Node</p>
-            </div> */}
           </div>
-
-        </div>
-
-        {/* BOTTOM CONTENT AREA (Title & Narrative Logs) */}
-        <div style={{ padding: '2.5rem' }}>
-          <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: '700' }}>{selectedEvent.event_type}</span>
-          <h2 style={{ fontFamily: 'Syne', margin: '0.3rem 0 1rem', fontSize: '1.8rem', color: '#111' }}>{selectedEvent.title}</h2>
-          <p style={{ color: 'rgba(0,0,0,0.6)', lineHeight: '1.8', fontSize: '0.98rem', whiteSpace: 'pre-line' }}>{selectedEvent.description}</p>
-        </div>
-
-      </div>
-    </div>
-  );
-})()}
+        );
+      })()}
 
       <Footer />
     </div>

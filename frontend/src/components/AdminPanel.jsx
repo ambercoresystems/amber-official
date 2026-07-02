@@ -114,7 +114,7 @@ const AdminPanel = () => {
       <div style={{ minHeight: '100vh', background: '#0b0c10', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-main)' }}>
         <form onSubmit={handleLogin} style={{ background: '#112233', padding: '3rem', borderRadius: '24px', width: '100%', maxWidth: '420px', border: '1px solid rgba(255,140,0,0.15)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <h2 style={{ fontFamily: 'var(--font-heading)', color: '#fff', fontSize: '1.8rem', margin: 0 }}>AmberCore <span style={{ color: '#ff8c00' }}>HQ</span></h2>
+            <h2 style={{ fontFamily: 'var(--font-heading)', color: '#fff', fontSize: '1.8rem', margin: 0 }}>AmberCore <span style={{ color: '#ff8c00' }}>AMBER</span></h2>
             <p style={{ color: '#8899a6', fontSize: '0.85rem', marginTop: '0.4rem' }}>Secure Administrative Terminal Entry</p>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
