@@ -214,7 +214,7 @@ const EventsPage = () => {
             background: '#16171b'
           }}>
             <div style={{ textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '2px', color: '#ff8c00', fontWeight: 'bold' }}>
-              Engagement Meta
+              EVENT DETAILS
             </div>
             
             <h4 style={{ fontFamily: 'Syne', fontSize: '1.1rem', margin: '0.5rem 0 0.3rem 0', fontWeight: '700', lineHeight: '1.4', color: '#fff' }}>
@@ -228,11 +228,11 @@ const EventsPage = () => {
               </p>
             )}
 
-            <div style={{ fontSize: '0.82rem', color: '#a0aec0', lineHeight: '1.6', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.8rem' }}>
+            {/* <div style={{ fontSize: '0.82rem', color: '#a0aec0', lineHeight: '1.6', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.8rem' }}>
               <p style={{ margin: '0 0 0.5rem 0' }}>• <strong>Timeline:</strong> {selectedEvent.date}</p>
               <p style={{ margin: '0 0 0.5rem 0' }}>• <strong>File Index:</strong> {modalImgIndex + 1} of {list.length}</p>
               <p style={{ margin: 0 }}>• <strong>Storage Status:</strong> Live Cloud Node</p>
-            </div>
+            </div> */}
           </div>
 
         </div>
