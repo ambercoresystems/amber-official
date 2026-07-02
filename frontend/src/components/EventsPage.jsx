@@ -156,6 +156,9 @@ const EventsPage = () => {
       // src/components/EventsPage.jsx
 // [Replace the existing selectedEvent modal section with this updated, high-contrast clean version]
 
+// src/components/EventsPage.jsx
+// [Replace the existing selectedEvent modal section with this unified overlay design]
+
 {selectedEvent && (() => {
   const resolvedCover = selectedEvent.cover_image 
     ? (selectedEvent.cover_image.startsWith('http') ? selectedEvent.cover_image : `${IMAGE_BASE_URL}${selectedEvent.cover_image}`)
@@ -186,31 +189,65 @@ const EventsPage = () => {
         backdropFilter: 'blur(10px)' 
       }}
     >
-      <div style={{ background: '#fff', borderRadius: '24px', maxWidth: '850px', width: '100%', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
+      {/* 🌟 SCROLL TRACK ENGINE: Guarantees full vertical scroll on all devices */}
+      <div style={{ 
+        background: '#fff', 
+        borderRadius: '24px', 
+        maxWidth: '850px', 
+        width: '100%', 
+        maxHeight: '92vh', 
+        overflowY: 'auto', 
+        position: 'relative', 
+        boxShadow: '0 20px 50px rgba(0,0,0,0.3)' 
+      }}>
         
-        {/* TOP WINDOW CLOSE BUTTON */}
-        <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#fff', border: 'none', fontSize: '0.9rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: 3020, fontWeight: 'bold' }}>✕</button>
+        {/* CLOSE BUTTON */}
+        <button onClick={() => setSelectedEvent(null)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#fff', border: 'none', fontSize: '0.9rem', cursor: 'pointer', width: '36px', height: '36px', borderRadius: '50%', boxShadow: '0 4px 12px rgba(0,0,0,0.2)', zIndex: 3020, fontWeight: 'bold' }}>✕</button>
         
-        {/* 100% WIDE IMAGE STAGE CONTAINER */}
+        {/* IMAGE FRAME CONTAINER */}
         <div style={{ position: 'relative', width: '100%', height: '420px', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderRadius: '24px 24px 0 0' }}>
           <img src={activeImageSrc} alt="Carousel view" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
           
+          {/* 🌟 SCRIM OVERLAY: A subtle dark tint at the bottom right corner to make the overlay text pop */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 35%, transparent 100%)', zIndex: 2, pointerEvents: 'none' }}></div>
+
+          {/* 🌟 ONSIDE TEXT OVERLAY: Positioned directly on the lower right corner of the picture layout */}
+          <div style={{ 
+            position: 'absolute', 
+            bottom: '1.5rem', 
+            right: '2rem', 
+            zIndex: 3, 
+            textAlign: 'right', 
+            color: '#fff',
+            maxWidth: '320px',
+            pointerEvents: 'none',
+            textShadow: '0 2px 10px rgba(0,0,0,0.5)'
+          }}>
+            <div style={{ textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '2px', color: '#ff8c00', fontWeight: 'bold' }}>
+              EVENT DETAILS
+            </div>
+            <h4 style={{ fontFamily: 'Syne', fontSize: '1.1rem', margin: '0.2rem 0 0.1rem 0', fontWeight: '700', color: '#fff' }}>
+              {selectedEvent.event_type} Record
+            </h4>
+            {selectedEvent.subtitle && (
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#ff8c00', fontStyle: 'italic', fontWeight: '500' }}>
+                {selectedEvent.subtitle}
+              </p>
+            )}
+          </div>
+
+          {/* SLIDER DISK BUTTONS */}
           {list.length > 1 && (
             <>
-              {/* 🌟 HIGH VISIBILITY BRIGHT SLIDER ARROWS */}
               <button 
                 onClick={() => setModalImgIndex(p => p === 0 ? list.length - 1 : p - 1)} 
                 style={{ position: 'absolute', left: '1.2rem', background: '#ffffff', color: '#111111', border: 'none', width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', fontSize: '1.6rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, boxShadow: '0 4px 15px rgba(0,0,0,0.25)', transition: '0.2s' }}
-                onMouseEnter={(e) => e.target.style.color = '#ff8c00'}
-                onMouseLeave={(e) => e.target.style.color = '#111111'}
               >
                 ‹
               </button>
               <button 
                 onClick={() => setModalImgIndex(p => p === list.length - 1 ? 0 : p + 1)} 
                 style={{ position: 'absolute', right: '1.2rem', background: '#ffffff', color: '#111111', border: 'none', width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', fontSize: '1.6rem', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, boxShadow: '0 4px 15px rgba(0,0,0,0.25)', transition: '0.2s' }}
-                onMouseEnter={(e) => e.target.style.color = '#ff8c00'}
-                onMouseLeave={(e) => e.target.style.color = '#111111'}
               >
                 ›
               </button>
@@ -218,30 +255,11 @@ const EventsPage = () => {
           )}
         </div>
 
-        {/* BOTTOM CONTENT BOX */}
-        <div style={{ padding: '2rem 2.5rem' }}>
-          
-          {/* TAGS ROW LAYOUT CONTAINER */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {selectedEvent.event_type}
-            </span>
-            
-            {/* 🌟 SUBTITLE INTEGRATED CLEANLY BESIDE THE MAIN CLASSIFICATION TAG */}
-            {selectedEvent.subtitle && (
-              <span style={{ fontSize: '0.82rem', color: '#666', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ color: '#ccc' }}>|</span> {selectedEvent.subtitle}
-              </span>
-            )}
-          </div>
-
-          <h2 style={{ fontFamily: 'Syne', margin: '0 0 1rem 0', fontSize: 'clamp(1.4rem, 3vw, 1.8rem)', color: '#111', fontWeight: '800', lineHeight: '1.3' }}>
-            {selectedEvent.title}
-          </h2>
-          
-          <p style={{ color: 'rgba(0,0,0,0.65)', lineHeight: '1.8', fontSize: '0.95rem', whiteSpace: 'pre-line', margin: 0 }}>
-            {selectedEvent.description}
-          </p>
+        {/* BOTTOM CONTENT INFO TEXT AREA */}
+        <div style={{ padding: '2.5rem' }}>
+          <span style={{ fontSize: '0.75rem', color: '#ff8c00', fontWeight: '700', textTransform: 'uppercase' }}>{selectedEvent.event_type}</span>
+          <h2 style={{ fontFamily: 'Syne', margin: '0.3rem 0 1rem', fontSize: '1.8rem', color: '#111', fontWeight: '800' }}>{selectedEvent.title}</h2>
+          <p style={{ color: 'rgba(0,0,0,0.6)', lineHeight: '1.8', fontSize: '0.98rem', whiteSpace: 'pre-line' }}>{selectedEvent.description}</p>
         </div>
 
       </div>
